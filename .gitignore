@@ -1,0 +1,5 @@
+# ignore all data file
+/data
+/data_reduced
+/gif_data
+/final_data_reduced
