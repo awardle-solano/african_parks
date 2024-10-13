@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def get_region_shape(name):
     # Check if the name exists in either 'ADM1_NAME' or 'ADM2_NAME' column
-    path = os.path.join(os.getcwd(), 'regional_shape_files/example.shp')
+    path = os.path.join('/Users/aws/Documents/personal_projects/african_parks/regional_shape_files/example.shp')
     gdf = gpd.read_file(path)
     if not gdf['ADM1_NAME'].isin([name]).any() and not gdf['ADM2_NAME'].isin([name]).any():
         print(f'Region with name "{name}" not found.')
@@ -13,12 +13,12 @@ def get_region_shape(name):
     return region
 
 def shape_file():
-    path = os.path.join(os.getcwd(), 'regional_shape_files/example.shp')
+    path = os.path.join('/Users/aws/Documents/personal_projects/african_parks/regional_shape_files/example.shp')
     gdf = gpd.read_file(path)
     return gdf
 
 def region_names(level=None):
-    path = os.path.join(os.getcwd(), 'regional_shape_files/example.shp')
+    path = os.path.join('/Users/aws/Documents/personal_projects/african_parks/regional_shape_files/example.shp')
     gdf = gpd.read_file(path)
     
     if level == 'adm1':
@@ -32,7 +32,7 @@ def region_names(level=None):
 
 def plot_region(name):
     # Path to your shapefile
-    path = os.path.join(os.getcwd(), 'regional_shape_files/example.shp')
+    path = os.path.join('/Users/aws/Documents/personal_projects/african_parks/regional_shape_files/example.shp')
     
     # Read the shapefile into a GeoDataFrame
     gdf = gpd.read_file(path)

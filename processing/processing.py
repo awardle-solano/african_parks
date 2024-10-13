@@ -33,7 +33,7 @@ def flooded_pixel_counts(df, clip=False, region=None):
 
     #calculate percentage of pixels with some flooding
     total_pixels = water_detection.size
-    mask = (water_detection >= 99) & (water_detection <= 200)
+    mask = (water_detection >= 100) & (water_detection <= 200)
     flooded_pixel_count = mask.sum().item()
 
     # calculate adjusted flooded pixel percentage
@@ -41,8 +41,6 @@ def flooded_pixel_counts(df, clip=False, region=None):
     for value, count in value_counts.items():
         if (value >= 100) & (value <= 200):
             scaled_flooding += ((value - 100) / 100) * count
-        elif value == 99:
-            scaled_flooding += value
 
     return  total_pixels, flooded_pixel_count, scaled_flooding
 
@@ -53,11 +51,11 @@ def ddd():
     return np.zeros(3, dtype=np.int64)
 
 def process_data():
-
+    print('yes')
     regions = region_names('adm2')
     regions_shapes = {name: get_region_shape(name) for name in regions}
 
-    root = os.path.join(os.getcwd(), 'data')
+    root = os.path.join('/Users/aws/Documents/personal_projects/african_parks/data/viirs')
 
     for year in sorted(os.listdir(root)):
 
@@ -86,13 +84,17 @@ def process_data():
                     file = os.path.join(day_dir, file)
                     ds = rioxarray.open_rasterio(file)
 
-                    print(ds)
-
                     for region in regions_shapes.keys():
                         t, f, fa = flooded_pixel_counts(ds, clip=True, region=regions_shapes[region])
                         all_data[region][f'{year}_{month}_{day}'] += np.array([t,f,fa], dtype=np.int64)
         
-        with open(f'data_reduced/{year}.pickle', 'wb') as f:
+        # Ensure 'data_reduced' directory exists
+        output_dir = 'data_reduced'
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        # Save the data for the year
+        with open(f'{output_dir}/{year}.pickle', 'wb') as f:
             pickle.dump(all_data, f)
 
 process_data()
@@ -139,4 +141,4 @@ def pickle_to_xarray(pickle_dir):
     save_dir = os.path.join(os.getcwd(), 'final_data_reduced/final_data.nc')
     dataset.to_netcdf(save_dir)
 
-pickle_to_xarray(os.path.join(os.getcwd(), 'data_reduced'))
+#pickle_to_xarray(os.path.join(os.getcwd(), 'data_reduced'))
